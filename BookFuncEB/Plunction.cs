@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace BookFuncEB
 {
-    public static class Function1
+    public static class Plunction
     {
-        [FunctionName("Function1")]
+        [FunctionName("Plunction")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
@@ -20,18 +20,20 @@ namespace BookFuncEB
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             string name = req.Query["name"];
+            string lame = req.Query["lame"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
+            lame = lame ?? data?.lame;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            string responseMessage = "hmmm...";
 
+            if (!string.IsNullOrEmpty(lame) && !string.IsNullOrEmpty(name))
+            {
+                responseMessage = $"{lame} {name} or something";
+            }
             return new OkObjectResult(responseMessage);
         }
-
-
     }
 }
